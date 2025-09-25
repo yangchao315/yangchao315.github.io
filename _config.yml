@@ -1,5 +1,5 @@
-name: "yangchao315 blog"
-description: "yangchao315的个人技术博客"
+name: "Shamrock"
+description: "Yangchao的个人技术博客"
 
 avatar: https://yangchao315.github.io/images/MIT.jpg
 #favicon: https://yangchao315.github.io/images/favicon.ico
@@ -20,7 +20,7 @@ footer-links:
   zhihu: 
   email: 576239368@qq.com
   facebook:
-  github: https://github.com/yangchao315
+  github: https://yangchao315.github.io
   rss: # just type anything here for a working RSS icon
   twitter: 
   youtube:

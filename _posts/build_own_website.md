@@ -10,9 +10,6 @@ author: yangchao
 ###### 说明：本教程只针对不了解网站搭建并且想要快速搭建起个人博客的新手，帮助建立网站的平台有很多，有一定网站开发基础的读者可另寻门路
 
 <!-- more -->
-
-### 目录
-
 - [Step 0. 准备工作](#step-0-准备工作)
 - [Step 1. 建立博客仓库](#step-1-建立博客仓库)
 - [Step 2. 修改仓库文件](#step-2-修改仓库文件)
@@ -24,17 +21,9 @@ author: yangchao
 
 ## Step 1. 建立博客仓库
 
-借助 GitHub 平台搭建博客网站，首先要建立一个与你的 github 账号相关联的博客仓库。推荐没有网站建设经验的新手通过 fork 我的博客仓库迅速建立起你的第一个网站。下面我们就来详细介绍这种方法。
-
-点击链接 <https://github.com/pianfan/pianfan.github.io> 进入我的博客仓库地址，点击这里的 Fork。
-
-![点击Fork](https://pianfan.github.io/images/fork.png)
+借助 GitHub 平台搭建博客网站，首先要建立一个与你的 github 账号相关联的博客仓库。
 
 仓库名称填写 `username.github.io`，注意 `username` 指的是用户名不是昵称。
-
-![设置仓库名称](https://pianfan.github.io/images/repositoryname.png)
-
-点击 Create fork，完成创建。这样你就有了你的第一个博客仓库，以后的操作都在你自己的仓库进行。
 
 ## Step 2. 修改仓库文件
 
@@ -60,39 +49,37 @@ author: yangchao
 
   - **网站名称和网站描述**
 
-    ![名称和描述](https://pianfan.github.io/images/name&desc.png)
+    ```c
+    name: "xxx blog"
+    description: "xxx的个人技术博客"
+    ```
 
     这个根据你自己的喜好来设置，不一定要仿造我的模式。比如你可以给你的博客网站取一个好听点的名字，网站描述也可以是简短的自我介绍或个性签名等任何你想表达的内容。
 
   - **个人头像和网站 logo**
 
-    ![头像和logo](https://pianfan.github.io/images/avatar&ico.png)
-
-    avatar 代表头像，后面的链接是你想显示在页面的头像图片的 url。favicon 指网站图标，即显示在浏览器标签页和收藏夹里的 logo，通常以 32 * 32 像素大小的 .ico 图片为宜，也可以不设置。
-
-    咱博客网站里的所有图片不是上传到 github 仓库里就可以显示到页面上了，需要用到图床。我用的是 [PicGo](https://picgo.github.io/PicGo-Doc/zh/)，只要与 github 仓库绑定就可以实现上传，且可以一键复制为 Markdown 形式，方便写文时插入图片。
-
-    ![GitHub 设置](https://pianfan.github.io/images/picgoset.png)
-
-    ![Markdown 形式](https://pianfan.github.io/images/markdownimg.png)
-
-  - **个人社交链接**
-
-    ![社交链接](https://pianfan.github.io/images/links.png)
-
-    填用户名就可以，没有的就不填。
+    avatar 代表头像，后面的链接是你想显示在页面的头像图片的 url。
+    favicon 指网站图标，即显示在浏览器标签页和收藏夹里的 logo，通常以 32 * 32 像素大小的 .ico 图片为宜，也可以不设置。
 
   - **脚注和网址**
 
-    ![版权标注和网址](https://pianfan.github.io/images/footer&url.png)
-
+    ```
+    footer-links:
+    zhihu: 
+    email: 576239368@qq.com
+    facebook:
+    github: https://yangchao315.github.io
+    rss: # just type anything here for a working RSS icon
+    twitter: 
+    youtube:
+  ```
   - **其他**
 
     如果你不知道改了之后会有什么后果，**不要去动它**。
 
 - ### 删除 _posts 文件夹并重建
 
-   _posts 文件夹里放的是博客文章，你以后的文章也要放在这里。现在你的_posts 文件夹里面放的还是我的文章，**请把它们全部删除**，以免造成侵权。
+   _posts 文件夹里放的是博客文章.
 
 - ### 删除 images 文件夹并重建
 
@@ -108,8 +95,7 @@ author: yangchao
 
 文章文件的命名也是有讲究的，请按照下面的例子呈现的格式命名：
 
-    2024-1-25-letter_to_you.md
-    2024-1-26-user_manual.md
+    2025-9-25-build_own_website.md
 
 还有一点需要注意，每篇文章开头记得附上说明，格式如下：
 
