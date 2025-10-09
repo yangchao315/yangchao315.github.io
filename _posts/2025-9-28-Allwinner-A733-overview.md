@@ -58,7 +58,7 @@ A733 Soc应用场景
 - rtos目录用于存放异构系统构建环境，不同平台rtos构建存在差异
 - target目录对应这device目录内容。本目录主要存放不同OS 对应不同板卡，不同芯片的业务逻辑配置
 - AW AIOT Linux SDK的 Buildroot系统，其包含了基于Linux系统开发用到的各种系统源码，驱动，工具，应用软件包。Buildroot是 Linux平台上的一个开源的嵌入式Linux系统自动构建框架。整个Buildroot是由  Makefile脚本和Kconfig配置文件构成的。你可以通过Buildroot配置，编译出一个完整的可以直接烧写到机器上运行的Linux系统软件
-- Yocto和 Buildroot一样，是一套构建嵌入式系统的工具，但是两者的风格完全不同
+
 ---
 
 感谢阅读！
