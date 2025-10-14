@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Radxa Cubie A7z"
+title: "Radxa Cubie A7z Overview"
 date:   2025-9-28
 tags:
     - Cubie A7z
@@ -23,17 +23,17 @@ A7z使用A733MX-HN3带NPU和HDMI
 - 全志 A733MX-N3X (带 NPU，不带 HDMI)
 - 全志 A733MX-HXX (带 HDMI 输出，不带 NPU)
 
-Cubie-A7z-01.png
+**Cubie-A7z**
 
 ![Cubie A7z](https://yangchao315.github.io/images/Cubie-A7z-01.png)
 
-A733 Soc Block框图如下
+**A733 Soc Block框图如下**
 
 ![A733 Block](https://yangchao315.github.io/images/A733-Block.png)
 
 ![A733 Block Simple](https://yangchao315.github.io/images/A733-Block2.png)
 
-A733 Soc应用场景
+**A733 Soc应用场景**
 
 ![A733 Application](https://yangchao315.github.io/images/A733-Application.png)
 
