@@ -17,7 +17,8 @@ author: yangchao
   - [开发者论坛](#开发者论坛)
   - [官方网站](#官方网站)
 - [nvdia gpu开源驱动](#nvdia-gpu开源驱动)
-  - [https://joyxu.github.io/2022/05/16/gpu-nvdia-open-source/](#httpsjoyxugithubio20220516gpu-nvdia-open-source)
+- [others](#others)
+  - [GPU ARCH(cornell)](#gpu-archcornell)
 
 # PVR 开源驱动
 ## 开发者文档
@@ -71,6 +72,13 @@ https://www.imaginationtech.com/
 https://github.com/NVIDIA/open-gpu-kernel-modules
 
 https://joyxu.github.io/2022/05/16/gpu-nvdia-open-source/
+
+# others
+
+## GPU ARCH(cornell)
+
+https://cvw.cac.cornell.edu/gpu-architecture
+
 ---
 
 感谢阅读！
