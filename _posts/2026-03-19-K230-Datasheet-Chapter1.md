@@ -3,10 +3,7 @@ layout: post
 title: "K230 芯片介绍 Chapter 1"
 date:   2026-03-19
 tags:
-    - Canaan
     - K230
-    - RISC-V
-    - AIoT
 comments: true
 author: yangchao
 ---

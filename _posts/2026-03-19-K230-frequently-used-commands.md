@@ -3,10 +3,7 @@ layout: post
 title: "K230 SDK常用命令"
 date:   2026-03-19
 tags:
-    - Canaan
     - K230
-    - SDK
-    - 嵌入式
 comments: true
 author: yangchao
 ---

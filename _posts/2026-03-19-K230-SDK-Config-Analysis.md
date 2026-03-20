@@ -3,11 +3,7 @@ layout: post
 title: "K230 SDK 编译配置解析"
 date:   2026-03-19
 tags:
-    - Canaan
     - K230
-    - RT-Smart
-    - Linux
-    - SDK
 comments: true
 author: yangchao
 ---

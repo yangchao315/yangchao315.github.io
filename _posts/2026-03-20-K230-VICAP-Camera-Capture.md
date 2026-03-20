@@ -3,11 +3,7 @@ layout: post
 title: "K230 VICAP摄像头图像捕获实验"
 date:   2026-03-20
 tags:
-    - Canaan
     - K230
-    - VICAP
-    - Camera
-    - SDK
 comments: true
 author: yangchao
 ---

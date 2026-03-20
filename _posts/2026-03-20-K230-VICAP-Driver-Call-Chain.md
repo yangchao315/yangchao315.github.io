@@ -3,12 +3,7 @@ layout: post
 title: "K230 VICAP应用层到驱动调用链分析"
 date:   2026-03-20
 tags:
-    - Canaan
     - K230
-    - VICAP
-    - MIPI
-    - Driver
-    - Camera
 comments: true
 author: yangchao
 ---

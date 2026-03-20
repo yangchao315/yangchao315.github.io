@@ -3,9 +3,7 @@ layout: post
 title: "K230 SDK环境搭建"
 date:   2026-03-19
 tags:
-    - Canaan
     - K230
-    - SDK
 comments: true
 author: yangchao
 ---
