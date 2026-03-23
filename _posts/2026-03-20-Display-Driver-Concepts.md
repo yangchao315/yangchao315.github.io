@@ -1,4 +1,13 @@
-# 显示软件工程师 JD 深度分析 — 详细知识点说明
+---
+layout: post
+title: "显示技术知识体系详解"
+date: 2026-03-20
+tags: [DRM, Display]
+comments: true
+author: yangchao
+---
+
+<!-- more -->
 
 ## 目录
 
@@ -30,10 +39,6 @@
 
 ## 1. Linux 内核架构与基础
 
-### 考察点
-- **JD1**: "熟悉Linux内核架构，具备2年以上Linux DRM/KMS显示驱动开发经验"
-- **JD2**: "熟悉Linux内核，掌握内核锁、中断使用、同步机制、内存申请、驱动调试手段等内核基本概念"
-
 ### 涉及知识
 | 知识点 | 说明 | 深度要求 |
 |---|---|---|
@@ -64,10 +69,6 @@
 ---
 
 ## 2. DRM/KMS 显示驱动框架
-
-### 考察点
-- **JD1**: "参与DRM/KMS框架下的DPU驱动开发与主线合入，支持主流Linux内核版本"
-- **JD2**: "熟悉fbdev和DRM等主流显示框架，并有项目落地的经验；熟悉DisplayProcessUnit工作机制，掌握内核显卡驱动的设计与实现、验证方法"
 
 ### 涉及知识
 DRM (Direct Rendering Manager) 是现代 Linux 显示驱动的核心框架，其核心组件：
@@ -146,10 +147,6 @@ Plane → (attached to) → CRTC → (drives) → Encoder → (converts to) → 
 
 ## 3. fbdev 帧缓冲驱动
 
-### 考察点
-- **JD1**: "熟悉帧缓冲、显存管理（fbdev/drm/gem/dma-buf）、VBlank、中断处理等机制"
-- **JD2**: "熟悉fbdev和DRM等主流显示框架"
-
 ### 涉及知识
 fbdev (Framebuffer Device) 是 DRM 出现前的传统 Linux 显示接口：
 
@@ -183,10 +180,6 @@ DRM/KMS 驱动 (现代层)
 ---
 
 ## 4. GEM / dma-buf 显存管理
-
-### 考察点
-- **JD1**: "熟悉帧缓冲、显存管理（fbdev/drm/gem/dma-buf）"
-- **JD2**: "熟悉DisplayProcessUnit工作机制，掌握内核显卡驱动的设计与实现"
 
 ### 涉及知识
 
@@ -229,10 +222,6 @@ void *dma_buf_vmap(struct dma_buf *);
 ---
 
 ## 5. DSI / MIPI-DSI 显示接口协议
-
-### 考察点
-- **JD1**: "调试与优化双屏、4K、MIPI-DSI、eDP、HDMI、LVDS等多种输出场景"
-- **JD2**: "负责DisplayProcessUnit，及相关显示接口DSI，HDMI，DP的驱动架构设计、研发、性能优化"
 
 ### 涉及知识
 
@@ -287,10 +276,6 @@ DSI PHY driver (dsi_phy_*.c)
 ---
 
 ## 6. HDMI / DP / eDP / LVDS 显示接口
-
-### 考察点
-- **JD1**: "HDMI、eDP、LVDS等多种输出场景"（作为调试场景提及）
-- **JD2**: "负责DisplayProcessUnit，及相关显示接口DSI，HDMI，DP的驱动架构设计"
 
 ### 涉及知识
 
@@ -347,9 +332,6 @@ drm_panel_attach()
 
 ## 7. VBlank 垂直同步机制
 
-### 考察点
-- **JD1**: "熟悉帧缓冲、显存管理（fbdev/drm/gem/dma-buf）、VBlank、中断处理等机制"
-
 ### 涉及知识
 
 #### VBlank (Vertical Blank)
@@ -395,9 +377,6 @@ drm_atomic_helper_page_flip();
 
 ## 8. 中断处理与同步机制
 
-### 考察点
-- **JD2**: "熟悉Linux内核，掌握内核锁、中断使用、同步机制、内存申请、驱动调试手段等内核基本概念"
-
 ### 涉及知识
 
 #### 中断处理
@@ -427,10 +406,6 @@ drm_atomic_helper_page_flip();
 ---
 
 ## 9. Android SurfaceFlinger 框架
-
-### 考察点
-- **JD1** (加分项): "有Android平台下显示系统开发经验"
-- **JD2**: "熟悉Android显示框架Surfacflinger和HWC"
 
 ### 涉及知识
 
@@ -484,10 +459,6 @@ Android 的显示服务器，负责合成所有应用的 Surface：
 
 ## 10. Android HWC (Hardware Composer)
 
-### 考察点
-- **JD1** (加分项): "有HWC相关开发经验"
-- **JD2**: "负责AndroidOS下HWC实现和优化"
-
 ### 涉及知识
 
 #### HWC HAL 版本
@@ -534,9 +505,6 @@ getCapabilities() // 查询硬件能力
 
 ## 11. Gralloc 内存分配机制
 
-### 考察点
-- **JD1** (加分项): "有Gralloc相关开发经验"
-
 ### 涉及知识
 
 #### Gralloc HAL
@@ -571,10 +539,6 @@ int gralloc_free(buffer_handle_t handle);
 ---
 
 ## 12. Wayland / Weston 显示框架
-
-### 考察点
-- **JD1** (加分项): "有Wayland/Weston经验"
-- **JD2**: "Linux Desktop下Wayland和x11的实现和优化"
 
 ### 涉及知识
 
@@ -629,9 +593,6 @@ int gralloc_free(buffer_handle_t handle);
 
 ## 13. X11 显示框架
 
-### 考察点
-- **JD2**: "Linux Desktop下Wayland和x11的实现和优化"
-
 ### 涉及知识
 
 #### X11 架构 (传统)
@@ -663,9 +624,6 @@ int gralloc_free(buffer_handle_t handle);
 
 ## 14. GPU / 图形渲染管线
 
-### 考察点
-- **JD1** (加分项): "有GPU相关开发经验"
-
 ### 涉及知识
 
 #### GPU 渲染管线
@@ -695,9 +653,6 @@ int gralloc_free(buffer_handle_t handle);
 
 ## 15. AFBC 帧缓冲压缩
 
-### 考察点
-- **JD1** (加分项): "有AFBC（ARMFrame Buffer Compression）相关开发经验"
-
 ### 涉及知识
 
 #### AFBC 简介
@@ -725,9 +680,6 @@ ARM Frame Buffer Compression — ARM 设计的帧缓冲压缩格式，用于减�
 ---
 
 ## 16. XR / VR 显示技术
-
-### 考察点
-- **JD2**: "熟悉XR相关显示技术实现和优化，例如frontbuffer rendering，ATW，Multiview rendering等"
 
 ### 涉及知识
 
@@ -771,9 +723,6 @@ ARM Frame Buffer Compression — ARM 设计的帧缓冲压缩格式，用于减�
 
 ## 17. 芯片 Bring-up 与仿真平台
 
-### 考察点
-- **JD2**: "具有FPGA、ZEBU、Veloce等仿真平台使用经验和芯片bringup经验者优先"
-
 ### 涉及知识
 
 #### 芯片 Bring-up 流程
@@ -815,9 +764,6 @@ ARM Frame Buffer Compression — ARM 设计的帧缓冲压缩格式，用于减�
 
 ## 18. 性能测试与优化方法
 
-### 考察点
-- **JD2**: "熟练掌握Linux下常见的性能测试、剖析工具及优化方法"
-
 ### 涉及知识
 
 #### 性能测试工具
@@ -857,9 +803,6 @@ ARM Frame Buffer Compression — ARM 设计的帧缓冲压缩格式，用于减�
 ---
 
 ## 19. 原理图与寄存器规格书
-
-### 考察点
-- **JD1**: "能看懂原理图和寄存器规格书，能与硬件团队协同调试"
 
 ### 涉及知识
 
@@ -901,9 +844,6 @@ writel(val, base + OFFSET);
 
 ## 20. Git 与代码规范
 
-### 考察点
-- **JD1**: "熟悉Git，具备良好的代码风格与文档能力"
-
 ### 涉及知识
 
 | 技能 | 说明 |
@@ -923,9 +863,6 @@ writel(val, base + OFFSET);
 ---
 
 ## 21. 多屏异显 / 分区更新 / 低功耗
-
-### 考察点
-- **JD1** (加分项): "有复杂场景调试经验（如多屏异显、旋转缩放、分区更新、低功耗等）"
 
 ### 涉及知识
 
@@ -972,9 +909,6 @@ writel(val, base + OFFSET);
 
 ## 22. DRM 主线社区贡献
 
-### 考察点
-- **JD1** (加分项): "有主线社区patch提交经验"
-
 ### 涉及知识
 
 #### Linux DRM 主线开发流程
@@ -998,9 +932,6 @@ writel(val, base + OFFSET);
 ---
 
 ## 23. LTP-DDT 测试框架
-
-### 考察点
-- **JD2**: "熟悉和掌握LTP-DDT的测试case的设计、修改、实现和调试"
 
 ### 涉及知识
 
@@ -1033,16 +964,8 @@ igt@kms_flip@basic-plain-flip      # 页面翻转测试
 - IGT 源码: https://gitlab.freedesktop.org/drm/igt-gpu-tools
 - LTP: https://github.com/linux-test-project/ltp
 
-
 ---
 
-## 附录: 两家 JD 对比
+## 感谢阅读！
 
-| 维度 | 无锡诚恒微电子 | 此芯科技 |
-|---|---|---|
-| **技术栈** | 以 DRM/KMS 内核驱动为主 | 覆盖 Android + Linux 双栈 |
-| **深度** | 强调 DRM 主线合入、AFBC 加分 | 强调 SoC 集成、性能优化 |
-| **加分项** | DRM 主线贡献、XR/VR | 芯片 Bring-up、XR/VR |
-| **系统视野** | 中等 | 更广 (SoC 层面) |
-| **城市** | 无锡 | 苏州 |
-| **薪资** | 15-30K·15薪 | 18-25K·15薪 |
+---
