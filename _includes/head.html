@@ -4,6 +4,13 @@
   {% include meta.html %}
   {% include fonts.html %}
 
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    });
+  </script>
+
   <!--[if lt IE 9]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
