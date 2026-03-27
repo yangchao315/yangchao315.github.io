@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Linux DRM 驱动实战：Cambricon SoC 显示驱动深度解析"
+title: "Linux DRM 驱动实战：Cn SoC 显示驱动深度解析"
 date: 2026-03-23
 tags: [DRM, Display]
 comments: true
@@ -12,9 +12,9 @@ author: yangchao
 - [一、驱动概述](#一驱动概述)
 - [二、整体架构](#二整体架构)
 - [三、核心组件分析](#三核心组件分析)
-  - [3.1 DRM 驱动主模块 (cambr_drm_drv)](#31-drm-驱动主模块-cambr_drm_drv)
-  - [3.2 VOP 驱动 (cambr_vop_drv)](#32-vop-驱动-cambr_vop_drv)
-  - [3.3 HDMI 驱动 (cambr_hdmi_drv)](#33-hdmi-驱动-cambr_hdmi_drv)
+  - [3.1 DRM 驱动主模块 (cambr\_drm\_drv)](#31-drm-驱动主模块-cambr_drm_drv)
+  - [3.2 VOP 驱动 (cambr\_vop\_drv)](#32-vop-驱动-cambr_vop_drv)
+  - [3.3 HDMI 驱动 (cambr\_hdmi\_drv)](#33-hdmi-驱动-cambr_hdmi_drv)
 - [四、CRTC 与 Plane 实现](#四crtc-与-plane-实现)
   - [4.1 Plane 原子操作](#41-plane-原子操作)
   - [4.2 CRTC 模式设置](#42-crtc-模式设置)
@@ -22,13 +22,15 @@ author: yangchao
 - [五、Component 框架详解](#五component-框架详解)
 - [六、GEM 与 DMA-BUF 集成](#六gem-与-dma-buf-集成)
 - [七、关键寄存器配置](#七关键寄存器配置)
+  - [7.1 时钟与复位初始化](#71-时钟与复位初始化)
+  - [7.2 DPI 时序配置](#72-dpi-时序配置)
 - [八、总结](#八总结)
 
 ---
 
 ## 一、驱动概述
 
-本文分析的是一个面向 **Cambricon（寒武纪）SoC** 的完整 Linux DRM 驱动示例。该驱动展示了现代 DRM 子系统的典型实现模式，包括：
+本文分析的是一个面向 **Cn（寒武纪）SoC** 的完整 Linux DRM 驱动示例。该驱动展示了现代 DRM 子系统的典型实现模式，包括：
 - Component 框架进行多组件管理
 - DRM Atomic 模式设置
 - GEM DMA 内存管理
@@ -38,7 +40,7 @@ author: yangchao
 ```c
 // cambr_drm_drv.h
 #define DRIVER_NAME    "cndrm"
-#define DRIVER_DESC    "Cambricon SoC DRM"
+#define DRIVER_DESC    "Cn SoC DRM"
 ```
 
 ---
@@ -401,7 +403,7 @@ void vop_dpi_config(void __iomem *regs)
 
 ## 八、总结
 
-该 Cambricon DRM 驱动展示了现代 Linux DRM 子系统的完整实现模式：
+该 Cn DRM 驱动展示了现代 Linux DRM 子系统的完整实现模式：
 
 | 特性 | 实现方式 |
 |------|----------|

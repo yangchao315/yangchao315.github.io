@@ -2,7 +2,7 @@
 layout: post
 title: "DisplayPort协议详解"
 date:   2026-03-23
-tags: [DisplayPort, DRM]
+tags: [DisplayPort]
 comments: true
 author: yangchao
 ---

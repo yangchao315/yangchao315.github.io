@@ -2,12 +2,12 @@
 layout: post
 title: "Amlogic Meson DRM + HDMI 2.1 深度分析：VPU 硬件架构、Overlay、Connector/Encoder 实现"
 date:   2026-03-23
-tags: [Amlogic, HDMI]
+tags: [HDMI]
 comments: true
 author: yangchao
 ---
 
-本文基于 Amlogic Darkknight 平台内核源码（`drm-darkknight` + `vout-darkknight`），深度分析 Meson DRM 驱动的完整架构，重点覆盖：VPU-HDMITX 硬件连接方式、Overlay 实现机制、DRM Connector/Encoder 设计，以及 HDMI 2.1 高级特性（FRL、QMS-VRR、HDR、HDCP）在驱动中的落地。
+本文基于 Amlogic dn 平台内核源码（`drm-dn` + `vout-dn`），深度分析 Meson DRM 驱动的完整架构，重点覆盖：VPU-HDMITX 硬件连接方式、Overlay 实现机制、DRM Connector/Encoder 设计，以及 HDMI 2.1 高级特性（FRL、QMS-VRR、HDR、HDCP）在驱动中的落地。
 
 <!-- more -->
 
@@ -16,19 +16,19 @@ author: yangchao
 - [驱动初始化与 component 框架](#驱动初始化与-component-框架)
 - [VPU 硬件架构与 OSD/Video Pipeline](#vpu-硬件架构与-osdvideo-pipeline)
   - [OSD Plane 数据通路](#osd-plane-数据通路)
-  - [Video Overlay：video_wrapper](#video-overlayvideo_wrapper)
+  - [Video Overlay：video\_wrapper](#video-overlayvideo_wrapper)
   - [PostBlend：VPP 合成输出](#postblendvpp-合成输出)
 - [VPU 与 HDMITX 的硬件接口](#vpu-与-hdmitx-的硬件接口)
   - [不是 DPI，是数字并行像素总线](#不是-dpi是数字并行像素总线)
   - [VENC / ENCL 编码器时序生成](#venc--encl-编码器时序生成)
 - [HDMI Connector 实现详解](#hdmi-connector-实现详解)
-  - [am_hdmi_tx 核心结构体](#am_hdmi_tx-核心结构体)
+  - [am\_hdmi\_tx 核心结构体](#am_hdmi_tx-核心结构体)
   - [HPD 与 EDID 处理](#hpd-与-edid-处理)
   - [Connector 扩展属性](#connector-扩展属性)
 - [HDMI Encoder 实现详解](#hdmi-encoder-实现详解)
-  - [atomic_mode_set：颜色属性决策](#atomic_mode_set颜色属性决策)
-  - [atomic_enable：vout 通知链路](#atomic_enablevout-通知链路)
-  - [atomic_disable：PHY 关断时序](#atomic_disablephy-关断时序)
+  - [atomic\_mode\_set：颜色属性决策](#atomic_mode_set颜色属性决策)
+  - [atomic\_enable：vout 通知链路](#atomic_enablevout-通知链路)
+  - [atomic\_disable：PHY 关断时序](#atomic_disablephy-关断时序)
 - [HDMI 协议与高级特性](#hdmi-协议与高级特性)
   - [HDMI 2.1 FRL 固定速率链路](#hdmi-21-frl-固定速率链路)
   - [QMS-VRR 快速媒体切换](#qms-vrr-快速媒体切换)
@@ -38,12 +38,13 @@ author: yangchao
 - [中断与异步提交](#中断与异步提交)
 - [内存与 DMA 模型](#内存与-dma-模型)
 - [参考资料](#参考资料)
+- [HDMI PHY 初始化流程](#hdmi-phy-初始化流程)
 
 ---
 
 ## 整体架构概览
 
-Darkknight 平台的显示子系统分为两个内核模块，通过 `meson_connector_dev` 接口解耦：
+dn 平台的显示子系统分为两个内核模块，通过 `meson_connector_dev` 接口解耦：
 
 ```
 用户态 (Wayland/Android/HWC)
@@ -65,7 +66,7 @@ Darkknight 平台的显示子系统分为两个内核模块，通过 `meson_conn
            │ meson_connector_dev hook   │
            ▼                            ▼
 ┌──────────────────────────────────────────────────────┐
-│              vout-darkknight 模块                    │
+│              vout-dn 模块                    │
 │  hdmitx_common ── hdmitx21 hw ── PHY (TMDS/FRL)     │
 │  hdmitx_drm_hook (全局 tx_base / tx_hw)              │
 └──────────────────────────────────────────────────────┘
@@ -79,7 +80,7 @@ Darkknight 平台的显示子系统分为两个内核模块，通过 `meson_conn
 
 ```
 display-dn/
-├── drm-darkknight/drm/          # DRM KMS 层
+├── drm-dn/drm/          # DRM KMS 层
 │   ├── meson_drm_main.c         # module_init/exit：先 vpu_init 再 drm_init
 │   ├── meson_drv.c              # platform_driver probe，component master
 │   ├── meson_hdmi.c             # HDMI connector + encoder (核心)
@@ -94,7 +95,7 @@ display-dn/
 │       ├── meson_vpu_video_wrapper.c # Video plane (YUV) 接口
 │       └── meson_vpu_hdr_dv.c   # HDR/DV tone-mapping 控制
 │
-└── vout-darkknight/vout/
+└── vout-dn/vout/
     ├── hdmitx_common/           # HDMI 协议公共层（与 SoC 无关）
     │   ├── hdmitx_common.c      # vic/edid/hpd/格式参数
     │   ├── hdmitx_edid_parse.c  # EDID Block 0/1 + CEA 扩展解析
@@ -282,7 +283,7 @@ Connector 与 Encoder 共享同一结构体（内嵌），通过 `container_of` 
 
 ### HPD 与 EDID 处理
 
-HPD 中断由 `vout-darkknight` 侧的 `hdmitx21` 处理，通过注册的回调 `meson_hdmitx_hpd_cb()` 通知 DRM：
+HPD 中断由 `vout-dn` 侧的 `hdmitx21` 处理，通过注册的回调 `meson_hdmitx_hpd_cb()` 通知 DRM：
 
 ```c
 static void meson_hdmitx_hpd_cb(void *data)
@@ -504,7 +505,7 @@ VBlank 中断触发时序：
 2. Commit kthread 在 vblank 后执行 `vpu_pipeline_prepare_update()` / `vpu_osd_pipeline_update()`
 3. RDMA（Register DMA）将寄存器更新列表在 VBlank 时原子写入，避免撕裂
 
-HDMITX 中断（HPD 变化、SCDC 状态变化、HDCP 认证完成）在 `vout-darkknight/hdmitx21/hw/interrupts.c` 中处理，通过注册回调异步通知 DRM 层。
+HDMITX 中断（HPD 变化、SCDC 状态变化、HDCP 认证完成）在 `vout-dn/hdmitx21/hw/interrupts.c` 中处理，通过注册回调异步通知 DRM 层。
 
 ---
 
@@ -540,6 +541,96 @@ Fence 同步：
 - [Amlogic Meson DRM upstream](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/gpu/drm/meson) — 主线参考实现
 - [ARM AFBC Specification](https://developer.arm.com/architectures/media-architectures/afbc) — AFBC block 格式
 - [HDCP 2.3 Specification](https://www.digital-cp.com/) — HDCP 认证协议
+
+## HDMI PHY 初始化流程
+
+HDMI PHY 负责将数字信号转换为差分模拟信号输出（TMDS 或 FRL），是链路信号质量的关键环节。Meson 驱动中 PHY 初始化由 `hdmitx_hw_set_phy()` 触发，通过 `hw_s7.c`（或对应 SoC 的 hw_xxx.c）写入 PHY 寄存器组。
+
+### PHY 初始化调用链
+
+```mermaid
+sequenceDiagram
+    participant DRM as DRM atomic_enable
+    participant ENC as meson_hdmi.c<br/>encoder_atomic_enable
+    participant VOUT as vout notify<br/>meson_vout_notify_mode_change
+    participant HW as hdmitx_common_do_mode_setting
+    participant PHY as hw_s7.c<br/>hdmitx_hw_set_phy
+
+    DRM->>ENC: atomic_enable(crtc_state)
+    ENC->>VOUT: EVENT_MODE_SET_START
+    VOUT->>HW: hdmitx_common_do_mode_setting()
+    HW->>PHY: set_phy(hw_comm, 1)
+    PHY->>PHY: 写入 TMDS/FRL PHY 寄存器<br/>（PLL 锁定、impedance、预加重）
+    PHY-->>HW: PHY 就绪
+    HW-->>VOUT: 完成
+    VOUT-->>ENC: EVENT_MODE_SET_FINISH
+    ENC->>DRM: CLR_AVMUTE，启动 HDCP
+```
+
+### PHY 初始化关键步骤
+
+PHY 上电初始化分为以下几个阶段：
+
+**1. HPLL 锁定**
+
+HDMI PLL（HPLL）由 `hw_clk.c` 配置，根据目标像素时钟（如 594 MHz for 4K60）计算 HPLL 分频系数：
+
+```c
+// hw_clk.c
+void hdmitx_set_clk(struct hdmitx_hw_common *tx_hw, struct hdmi_format_para *para)
+{
+    // 根据 tmds_clk_div 和 pixel_clk 选择 HPLL 配置
+    hdmitx_hpll_set(tx_hw, para->tmds_clk);
+    // 等待 PLL lock
+    hd21_poll_reg(ANACTRL_HDMIPLL_CTRL0, 31, 1, 5 * HZ);
+}
+```
+
+**2. TMDS PHY 模拟参数配置**
+
+TMDS 模式下，PHY 需配置阻抗匹配（`HDMITX_PHY_CNTL1` bit[7:0]）、驱动电流和预加重（pre-emphasis）：
+
+```c
+// hw_s7.c（TMDS 3G 以下）
+static void set_phy_by_mode_s7(struct hdmitx_hw_common *tx_hw,
+                                enum hdmitx_phy_mode mode)
+{
+    hd21_write_reg(ANACTRL_HDMIPHY_CTRL0, 0x37eb65c4); // Z0=50Ω
+    hd21_write_reg(ANACTRL_HDMIPHY_CTRL1, 0x0000ff00); // 预加重 = 0
+    hd21_write_reg(ANACTRL_HDMIPHY_CTRL3, 0x2ab0ff3b); // 驱动电流
+    hd21_write_reg(ANACTRL_HDMIPHY_CTRL5, 0x00000003); // PHY enable
+}
+```
+
+**3. FRL PHY 配置（HDMI 2.1）**
+
+FRL 模式下 PHY 需额外配置 4 lane 均衡器（EQ）参数，并通过 SCDC 协商速率后再 enable lane：
+
+```c
+// hw_s7.c（FRL 12Gbps）
+static void set_phy_frl_s7(struct hdmitx_hw_common *tx_hw, u32 frl_rate)
+{
+    // 关闭 TMDS，切换到 FRL 模式
+    hd21_write_reg(ANACTRL_HDMIPHY_CTRL0, 0x0);
+    // 配置 FRL lane 参数
+    hd21_write_reg(ANACTRL_HDMITX_PHY_CNTL0, frl_phy_cfg[frl_rate]);
+    hd21_write_reg(ANACTRL_HDMITX_PHY_CNTL1, 0x efgh); // EQ gain
+    // 等待 PLL 重新锁定（FRL 使用不同频率）
+    hd21_poll_reg(ANACTRL_HDMIPLL_CTRL0, 31, 1, 2 * HZ);
+}
+```
+
+**4. PHY 关断时序**
+
+关断顺序需遵循先 AVMUTE 再关 PHY，避免 TV 端因信号突变产生雪花：
+
+```c
+// meson_hdmi.c — atomic_disable
+hdmitx_common_avmute_locked(tx_comm, SET_AVMUTE, AVMUTE_PATH_DRM);
+msleep(100);                          // 等待 TV 进入静音
+hdmitx_hw_set_phy(hw_comm, 0);        // 关闭 PHY 差分对
+msleep(100);                          // 等待 TV 检测到断开
+```
 
 ---
 感谢阅读！

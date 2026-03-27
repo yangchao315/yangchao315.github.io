@@ -2,7 +2,7 @@
 layout: post
 title: "DRM 子系统核心机制详解：问答集锦"
 date: 2026-03-23
-tags: [DRM, Linux Kernel]
+tags: [DRM]
 comments: true
 author: yangchao
 ---
@@ -26,18 +26,18 @@ author: yangchao
   - [3.3 Plane/CRTC/Encoder 配置时序](#33-planecrtcencoder-配置时序)
   - [3.4 Commit 完成回调机制](#34-commit-完成回调机制)
   - [3.5 高频问题](#35-高频问题)
-  - [四、State 状态管理](#四state-状态管理)
+- [四、State 状态管理](#四state-状态管理)
   - [4.1 Atomic State 结构](#41-atomic-state-结构)
   - [4.2 State 复制与检查](#42-state-复制与检查)
   - [4.3 State 交换与回滚](#43-state-交换与回滚)
   - [4.4 State 交换与提交 (commit)](#44-state-交换与提交-commit)
-  - [4.5 acquire_ctx 锁管理机制](#45-acquire_ctx-锁管理机制)
-  - [4.6 allow_modeset 标志位](#46-allow_modeset-标志位)
+  - [4.5 acquire\_ctx 锁管理机制](#45-acquire_ctx-锁管理机制)
+  - [4.6 allow\_modeset 标志位](#46-allow_modeset-标志位)
   - [4.7 State 复制流程详解](#47-state-复制流程详解)
   - [4.8 State 错误处理与回滚](#48-state-错误处理与回滚)
   - [4.9 Legacy vs Atomic 状态管理差异](#49-legacy-vs-atomic-状态管理差异)
   - [4.10 Commit 回调执行顺序](#410-commit-回调执行顺序)
-  - [4.11 drm_private_state 使用场景](#411-drm_private_state-使用场景)
+  - [4.11 drm\_private\_state 使用场景](#411-drm_private_state-使用场景)
 - [五、多路送显架构](#五多路送显架构)
   - [5.1 CRTC/Encoder 注册机制](#51-crtcencoder-注册机制)
   - [5.2 资源分配与克隆模式](#52-资源分配与克隆模式)
@@ -51,21 +51,22 @@ author: yangchao
   - [7.2 信号特性](#72-信号特性)
   - [7.3 时序要求](#73-时序要求)
 - [八、常见问题与要点](#八常见问题与要点)
-- [九、DRM Writeback 回写机制](#九drm-writeback-回写机制)
-  - [9.1 Writeback 核心概念](#91-writeback-核心概念)
-  - [9.2 Writeback 数据结构](#92-writeback-数据结构)
-  - [9.3 Writeback 流程解析](#93-writeback-流程解析)
-  - [9.4 Capture Port 配置](#94-capture-port-配置)
-  - [9.5 典型应用场景](#95-典型应用场景)
-  - [9.6 高频问题](#96-高频问题)
-- [十、Sync/Async/Nonblock 送显模式](#十synciasyncnonblock-送显模式)
-  - [10.1 Sync Commit（同步送显）](#101-sync-commit同步送显)
-  - [10.2 Nonblock Commit（非阻塞送显）](#102-nonblock-commit非阻塞送显)
-  - [10.3 Async Update（异步平面更新）](#103-async-update异步平面更新)
-  - [10.4 Legacy Cursor Update（传统光标更新）](#104-legacy-cursor-update传统光标更新)
-  - [10.5 三种模式详细对比](#105-三种模式详细对比)
-  - [10.6 Meson 驱动的 Commit 模式选择](#106-meson-驱动的-commit-模式选择)
+- [十、DRM Writeback 回写机制](#十drm-writeback-回写机制)
+  - [10.1 Writeback 核心概念](#101-writeback-核心概念)
+  - [10.2 Writeback 数据结构](#102-writeback-数据结构)
+  - [10.3 Writeback 流程解析](#103-writeback-流程解析)
+  - [10.4 Atomic Commit 流程](#104-atomic-commit-流程)
+  - [10.5 Capture Port 配置](#105-capture-port-配置)
+  - [10.6 典型应用场景](#106-典型应用场景)
   - [10.7 高频问题](#107-高频问题)
+- [十一、Sync/Async/Nonblock 送显模式](#十一syncasyncnonblock-送显模式)
+  - [11.1 Sync Commit（同步送显）](#111-sync-commit同步送显)
+  - [11.2 Nonblock Commit（非阻塞送显）](#112-nonblock-commit非阻塞送显)
+  - [11.3 Async Update（异步平面更新）](#113-async-update异步平面更新)
+  - [11.4 Legacy Cursor Update（传统光标更新）](#114-legacy-cursor-update传统光标更新)
+  - [11.5 三种模式详细对比](#115-三种模式详细对比)
+  - [11.6 Meson 驱动的 Commit 模式选择](#116-meson-驱动的-commit-模式选择)
+  - [11.7 高频问题](#117-高频问题)
 - [总结](#总结)
 
 ---

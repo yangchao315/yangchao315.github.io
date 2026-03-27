@@ -2,7 +2,7 @@
 layout: post
 title: "VeriSilicon DRM 驱动深度解析：StarFive JH7100 显示子系统实现"
 date: 2026-03-23
-tags: [DRM, Display, StarFive]
+tags: [DRM, StarFive]
 comments: true
 author: yangchao
 ---
@@ -12,9 +12,9 @@ author: yangchao
 - [一、驱动概述](#一驱动概述)
 - [二、系统架构](#二系统架构)
 - [三、核心组件分析](#三核心组件分析)
-  - [3.1 主驱动模块 (vs_drv.c)](#31-主驱动模块-vs_driv)
-  - [3.2 显示控制器 (vs_dc.c)](#32-显示控制器-vs_dc)
-  - [3.3 CRTC 实现 (vs_crtc.c)](#33-crtc-实现-vs_crtc)
+  - [3.1 主驱动模块 (vs\_drv.c)](#31-主驱动模块-vs_drvc)
+  - [3.2 显示控制器 (vs\_dc.c)](#32-显示控制器-vs_dcc)
+  - [3.3 CRTC 实现 (vs\_crtc.c)](#33-crtc-实现-vs_crtcc)
 - [四、Plane 与图层管理](#四plane-与图层管理)
 - [五、输出接口支持](#五输出接口支持)
   - [5.1 HDMI 输出](#51-hdmi-输出)
